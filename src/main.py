@@ -1,6 +1,7 @@
 import argparse
 import os
 import sys
+import subprocess
 from rich.console import Console
 from dotenv import load_dotenv
 
@@ -33,16 +34,53 @@ def main():
     scenes = parse_markdown(args.input_file)
     console.print(f"Found {len(scenes)} scenes.")
     
+    video_files = []
+    
     for scene in scenes:
         console.print(f"\n[bold cyan]Generating code for scene: {scene['scene_name']}...[/bold cyan]")
         try:
             code = generate_scene_code(scene)
             # console.print(f"[dim]{code}[/dim]") # Debug: show generated code
             
-            render_code(code, scene['scene_name'])
+            video_path = render_code(code, scene['scene_name'])
+            if video_path:
+                video_files.append(video_path)
             
         except Exception as e:
             console.print(f"[bold red]Failed to process scene {scene['scene_name']}: {e}[/bold red]")
+
+    if video_files:
+        console.print("\n[bold green]Merging videos...[/bold green]")
+        # Create a file list for ffmpeg
+        list_file = "video_list.txt"
+        with open(list_file, "w") as f:
+            for v in video_files:
+                # ffmpeg requires absolute paths or relative safe paths
+                abs_path = os.path.abspath(v)
+                f.write(f"file '{abs_path}'\n")
+        
+        output_merged = "final_video.mp4"
+        # ffmpeg command to concat
+        cmd = [
+            "ffmpeg",
+            "-f", "concat",
+            "-safe", "0",
+            "-i", list_file,
+            "-c", "copy",
+            "-y", # overwrite
+            output_merged
+        ]
+        
+        try:
+            subprocess.run(cmd, check=True, capture_output=True)
+            console.print(f"[bold green]Final video saved to: {os.path.abspath(output_merged)}[/bold green]")
+        except subprocess.CalledProcessError as e:
+            console.print("[bold red]Error merging videos![/bold red]")
+        finally:
+            if os.path.exists(list_file):
+                os.remove(list_file)
+    else:
+        console.print("[bold yellow]No videos were generated to merge.[/bold yellow]")
 
 if __name__ == "__main__":
     main()

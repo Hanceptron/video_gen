@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.pyc
+venv/
+.env
+
+# Manim / Output
+media/
+output/
+final_video.mp4
+
+# Temporary files
+temp_*.py
+video_list.txt
+.DS_Store
