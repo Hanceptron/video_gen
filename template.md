@@ -1,51 +1,79 @@
-# Manimator Script Template
+# Manimator Script Generation Template
 
-This file serves as a template for creating videos with Manimator.
-The parser looks for specific keywords: `## Scene:`, `**Narrative:**`, and `**Visual:**`.
+**INSTRUCTIONS FOR THE AI SCRIPTWRITER:**
+You are generating a script for "Manimator", a tool that converts Markdown into Python/Manim animations.
+Your output must follow the **Strict Format** below. The "Visual" descriptions are the most important part—they must be literal, geometric, and specific.
+
+---
+
+## Strict Format Rules
+1.  Each scene must start with `## Scene: [Name]`.
+2.  **Narrative:** Write the voiceover text. Keep it concise (approx. 20-40 words per scene).
+3.  **Visual:** Write a numbered list of instructions.
+
+## How to Write "Visual" Instructions (CRITICAL)
+The Animation AI is literal. It does not know what abstract concepts look like.
+*   **BAD:** "Show the concept of inflation." (The AI will fail or just write the word "Inflation")
+*   **GOOD:** "Show a balloon labeled 'Prices' growing larger and turning red."
+
+*   **BAD:** "Draw a Blockchain."
+*   **GOOD:** "Draw 3 squares horizontally aligned. Connect them with lines. Label them 'Block 1', 'Block 2', 'Block 3'."
+
+*   **BAD:** "Show a server."
+*   **GOOD:** "Draw a grey rectangle with small blinking lights (circles) on the front."
+
+*   **Layouts:** Explicitly ask for "Grid layout", "List layout", or "Centered".
+
+---
+
+## Template (Copy and Fill)
+
+```markdown
+# [Video Title]
+
+[Brief description of the video topic]
 
 ---
 
 ## Scene: [Scene Name]
 **Narrative:**
-[Write the script or voiceover text here. This helps the AI understand the context of what is happening.]
+[Voiceover text here...]
 
 **Visual:**
-[Describe exactly what should appear on screen. Be specific about:]
-- **Text:** What text to show? (e.g., "Show title 'Hello World'")
-- **Layout:** Where should it go? (e.g., "Center of screen", "Top left")
-- **Colors:** Any specific colors? (e.g., "Red text", "Blue circle")
-- **Animations:** How should things appear? (e.g., "Fade in", "Write text", "Grow from center")
+1. [Step 1: Clear screen or keep previous?]
+2. [Step 2: Describe object 1 (Shape, Color, Text, Position)]
+3. [Step 3: Describe animation (FadeIn, Write, Grow, Move)]
+4. [Step 4: Describe layout (e.g., "Arrange these items in a row")]
+
+---
+```
+
+## Example Output
+
+```markdown
+# Understanding RAM vs Disk
 
 ---
 
-## Scene: Example - Introduction
+## Scene: Introduction
 **Narrative:**
-Welcome to this tutorial on Python lists. Lists are versatile data structures.
+Your computer has two types of memory. RAM is fast but temporary, while the Hard Disk is slow but permanent.
 
 **Visual:**
-1. Display the title "Python Lists" in big bold yellow text at the top.
-2. Below it, show a list of bullet points appearing one by one:
-   - "Ordered"
-   - "Mutable"
-   - "Allow Duplicates"
-3. Use a standard list layout (aligned left, moving down).
+1. Split the screen into two halves (Left and Right).
+2. On the LEFT, draw a green square labeled "RAM". Above it, show text "Fast & Temporary".
+3. On the RIGHT, draw a grey cylinder labeled "Disk". Above it, show text "Slow & Permanent".
+4. Animate them appearing one by one.
 
 ---
 
-## Scene: Example - Code Visualization
+## Scene: The Data Flow
 **Narrative:**
-Let's look at how we define a list in code.
+When you open a program, data moves from the slow disk into the fast RAM so the CPU can use it.
 
 **Visual:**
-1. Clear the previous scene.
-2. Show a code snippet in the center: `my_list = [1, 2, 3]`
-3. Draw a box around the code snippet to highlight it.
-4. Animate an arrow pointing to the brackets `[]` with the label "Square Brackets".
-
----
-
-## Tips for Best Results
-1. **Keep it Modular:** Break long topics into multiple small scenes.
-2. **Be Explicit:** Instead of "Show some math", say "Show the equation E = mc^2 in the center".
-3. **Layouts:** The AI is good at standard layouts. Ask for "lists", "grids", or "centered text".
-4. **Keywords:** Use Manim keywords if you know them (e.g., "Create a VGroup", "Use Write animation", "FadeIn").
+1. Keep the RAM and Disk from the previous scene.
+2. Draw a small circle labeled "Data" inside the "Disk".
+3. Animate the "Data" circle moving from the Disk to the RAM.
+4. Make the RAM glow yellow when the data arrives.
+```

@@ -40,8 +40,28 @@ def main():
         console.print(f"\n[bold cyan]Generating code for scene: {scene['scene_name']}...[/bold cyan]")
         try:
             code = generate_scene_code(scene)
-            # console.print(f"[dim]{code}[/dim]") # Debug: show generated code
             
+            # Check code quality
+            console.print(f"[dim]Checking code quality...[/dim]")
+            from checker import check_code
+            passed, feedback = check_code(code, scene)
+            
+            if not passed:
+                console.print(f"[bold yellow]Quality Check Failed: {feedback}[/bold yellow]")
+                console.print(f"[bold yellow]Regenerating with feedback...[/bold yellow]")
+                # Regenerate with feedback (simple approach: append feedback to prompt)
+                # For now, we'll just re-call generate with a modified prompt or just trust the repairer for crashes.
+                # To properly regenerate, we'd need to modify generate_scene_code to accept feedback.
+                # Let's do a simple hack: update the visual instruction temporarily
+                original_instruction = scene['visual_instruction']
+                scene['visual_instruction'] += f"\n\nCRITICAL FEEDBACK FROM PREVIOUS ATTEMPT: {feedback}"
+                code = generate_scene_code(scene)
+                scene['visual_instruction'] = original_instruction # Restore
+                
+                console.print(f"[bold green]Regenerated code.[/bold green]")
+            else:
+                console.print(f"[dim]Quality Check Passed.[/dim]")
+
             video_path = render_code(code, scene['scene_name'])
             if video_path:
                 video_files.append(video_path)
