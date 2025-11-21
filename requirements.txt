@@ -1,0 +1,4 @@
+manim
+openai
+rich
+python-dotenv
